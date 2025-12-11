@@ -8,8 +8,6 @@ Full CRUD operations for task management
 
 Secure authentication using NextAuth (JWT strategy)
 
-Persistent storage using PostgreSQL + Prisma ORM
-
 AI-powered suggestions via OpenAI
 
 Modern UI using Tailwind CSS (with optional shadcn/ui)
@@ -133,8 +131,8 @@ Environment Variables (.env)
 
 Your .env should include:
 
-# PostgreSQL Database
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public
+# MongoDB Database
+Mongo_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public
 
 # NextAuth
 NEXTAUTH_SECRET=replace_with_secure_random_string
@@ -155,25 +153,25 @@ The system uses two main models:
 
 User
 model User {
-  id        String   @id @default(uuid())
+  id        String   
   name      String?
-  email     String   @unique
+  email     String
   password  String
   tasks     Task[]
-  createdAt DateTime @default(now())
+  createdAt DateTime
 }
 
 Task
 model Task {
-  id          String   @id @default(uuid())
+  id          String  
   title       String
   description String
   priority    String
   deadline    DateTime
   status      String
   createdBy   String
-  user        User      @relation(fields: [createdBy], references: [id])
-  createdAt   DateTime  @default(now())
+  user        User     
+  createdAt   DateTime  
 }
 
 OpenAI Integration
@@ -246,3 +244,4 @@ test
 Add automated Prisma migrations in production
 
 Add rate limiting for OpenAI API
+
