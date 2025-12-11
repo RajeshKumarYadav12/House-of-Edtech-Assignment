@@ -32,9 +32,9 @@ export default function LoginPage() {
 
     try {
       const result = await signIn('credentials', {
+        redirect: false,
         email: formData.email,
         password: formData.password,
-        callbackUrl: '/dashboard',
       });
 
       if (result?.error) {
@@ -42,7 +42,11 @@ export default function LoginPage() {
         setLoading(false);
       } else if (result?.ok) {
         toast.success('Login successful!');
-        // NextAuth will handle the redirect automatically
+        // Use window.location for more reliable redirect on Vercel
+        window.location.href = '/dashboard';
+      } else {
+        toast.error('Login failed');
+        setLoading(false);
       }
     } catch (error) {
       toast.error('Something went wrong');

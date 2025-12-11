@@ -66,16 +66,18 @@ export default function RegisterPage() {
       
       // Automatically sign in after successful registration
       const signInResult = await signIn('credentials', {
+        redirect: false,
         email: formData.email,
         password: formData.password,
-        callbackUrl: '/dashboard',
       });
 
       if (signInResult?.error) {
         toast.error('Registration successful but login failed. Please login manually.');
         router.push('/login');
+      } else if (signInResult?.ok) {
+        // Use window.location for more reliable redirect on Vercel
+        window.location.href = '/dashboard';
       }
-      // NextAuth will handle the redirect automatically if sign-in succeeds
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
       toast.error(errorMessage);
