@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -62,7 +63,19 @@ export default function RegisterPage() {
       }
 
       toast.success('Account created successfully!');
-      router.push('/login');
+      
+      // Automatically sign in after successful registration
+      const signInResult = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        callbackUrl: '/dashboard',
+      });
+
+      if (signInResult?.error) {
+        toast.error('Registration successful but login failed. Please login manually.');
+        router.push('/login');
+      }
+      // NextAuth will handle the redirect automatically if sign-in succeeds
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
       toast.error(errorMessage);
